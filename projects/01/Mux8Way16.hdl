@@ -1,0 +1,50 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/Mux8Way16.hdl
+
+/**
+ * 8-way 16-bit multiplexor:
+ * out = a if sel == 000
+ *       b if sel == 001
+ *       etc.
+ *       h if sel == 111
+ */
+
+CHIP Mux8Way16 {
+    IN a[16], b[16], c[16], d[16],
+       e[16], f[16], g[16], h[16],
+       sel[3];
+    OUT out[16];
+
+    PARTS:
+    // Put your code here:
+	Not(in=sel[0],out=notsel0);
+	Not(in=sel[1],out=notsel1);
+	Not(in=sel[2],out=notsel2);
+	// Selects a or h
+	And(a=notsel0,b=notsel1,out=temp1);
+	And(a=temp1,b=notsel2,out=sela);
+	Mux16(a=h,b=a,sel=sela,out=outa);
+	// Selects b or g
+	And(a=sel[0],b=notsel1,out=temp2);
+	And(a=temp2,b=notsel2,out=selb);
+	Mux16(a=g,b=b,sel=selb,out=outb);
+	// Selects c or f
+	And(a=notsel0,b=sel[1],out=temp3);
+	And(a=temp3,b=notsel2,out=selc);
+	Mux16(a=f,b=c,sel=selc,out=outc);
+	// Selects d or e
+	And(a=sel[0],b=sel[1],out=temp4);
+	And(a=temp4,b=notsel2,out=seld);
+	Mux16(a=e,b=d,sel=seld,out=outd);
+	// Compares a or h and b or g
+	Xor(a=sel[0],b=sel[1],out=selbg);
+	Mux16(a=outa,b=outb,sel=selbg,out=outahbg);
+	// Compares c or f and d or e
+	Xor(a=sel[0],b=sel[1],out=selcf);
+	Mux16(a=outd,b=outc,sel=selcf,out=outcfde);
+	// Compares ahbg and cfde
+	Xor(a=sel[1],b=sel[2],out=selcfde);
+	Mux16(a=outahbg,b=outcfde,sel=selcfde,out=out);
+}

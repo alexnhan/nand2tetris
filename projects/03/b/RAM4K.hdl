@@ -1,0 +1,31 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/03/b/RAM4K.hdl
+
+/**
+ * Memory of 4K registers, each 16 bit-wide. Out holds the value
+ * stored at the memory location specified by address. If load==1, then 
+ * the in value is loaded into the memory location specified by address 
+ * (the loaded value will be emitted to out from the next time step onward).
+ */
+
+CHIP RAM4K {
+    IN in[16], load, address[12];
+    OUT out[16];
+
+    PARTS:
+    // Put your code here:
+	// Selects which of the 8 RAM512's registers to write
+	DMux8Way(in=load,sel[0]=address[9],sel[1]=address[10],sel[2]=address[11],a=ram0,b=ram1,c=ram2,d=ram3,e=ram4,f=ram5,g=ram6,h=ram7);
+	RAM512(in=in,load=ram0,address[0]=address[0],address[1]=address[1],address[2]=address[2],address[3]=address[3],address[4]=address[4],address[5]=address[5],address[6]=address[6],address[7]=address[7],address[8]=address[8],out=out0);
+	RAM512(in=in,load=ram1,address[0]=address[0],address[1]=address[1],address[2]=address[2],address[3]=address[3],address[4]=address[4],address[5]=address[5],address[6]=address[6],address[7]=address[7],address[8]=address[8],out=out1);
+	RAM512(in=in,load=ram2,address[0]=address[0],address[1]=address[1],address[2]=address[2],address[3]=address[3],address[4]=address[4],address[5]=address[5],address[6]=address[6],address[7]=address[7],address[8]=address[8],out=out2);
+	RAM512(in=in,load=ram3,address[0]=address[0],address[1]=address[1],address[2]=address[2],address[3]=address[3],address[4]=address[4],address[5]=address[5],address[6]=address[6],address[7]=address[7],address[8]=address[8],out=out3);
+	RAM512(in=in,load=ram4,address[0]=address[0],address[1]=address[1],address[2]=address[2],address[3]=address[3],address[4]=address[4],address[5]=address[5],address[6]=address[6],address[7]=address[7],address[8]=address[8],out=out4);
+	RAM512(in=in,load=ram5,address[0]=address[0],address[1]=address[1],address[2]=address[2],address[3]=address[3],address[4]=address[4],address[5]=address[5],address[6]=address[6],address[7]=address[7],address[8]=address[8],out=out5);
+	RAM512(in=in,load=ram6,address[0]=address[0],address[1]=address[1],address[2]=address[2],address[3]=address[3],address[4]=address[4],address[5]=address[5],address[6]=address[6],address[7]=address[7],address[8]=address[8],out=out6);
+	RAM512(in=in,load=ram7,address[0]=address[0],address[1]=address[1],address[2]=address[2],address[3]=address[3],address[4]=address[4],address[5]=address[5],address[6]=address[6],address[7]=address[7],address[8]=address[8],out=out7);
+	// Selects which of the 8 RAM512's registers to read
+	Mux8Way16(a=out0,b=out1,c=out2,d=out3,e=out4,f=out5,g=out6,h=out7,sel[0]=address[9],sel[1]=address[10],sel[2]=address[11],out=out);
+}
