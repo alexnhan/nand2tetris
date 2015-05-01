@@ -40,4 +40,42 @@ CHIP CPU {
 
     PARTS:
     // Put your code here:
+	// instruction[15] is the steering bit, if 0: then load A (A-instruction), if 1: then compute (C-instruction)
+	// Logic for the A register
+	Mux16(a=instruction,b=ALUOut,sel=instruction[15],out=inA);
+	Not(in=instruction[15],out=notInstr15); // Instruction[15] = 0, means load A with Instruction[0..14]
+	Or(a=notInstr15,b=instruction[5],out=loadA);
+	ARegister(in=inA,load=loadA,out=outA,out[0..14]=addressM);
+	
+	// Logic for A/M
+	And(a=instruction[15],b=instruction[12],out=selAorM);
+	Mux16(a=outA,b=inM,sel=selAorM,out=AorM);
+	
+	// Logic for D register
+	And(a=instruction[15],b=instruction[4],out=loadD);
+	DRegister(in=ALUOut,load=loadD,out=outD);
+	
+	// Logic for ALU
+	ALU(x=outD,y=AorM,zx=instruction[11],nx=instruction[10],zy=instruction[9],ny=instruction[8],f=instruction[7],no=instruction[6],out=ALUOut,out=outM,zr=zero,ng=neg);
+	
+	// Logic for writing to M (RAM)
+	And(a=instruction[15],b=instruction[3],out=writeM); // writeM when it is a compute instruction and d3 bit is high
+	
+	// Logic for loading PC with A (jump location)
+	And(a=zero,b=instruction[1],out=z1); // value is zero and C-instruction wants to compare to zero
+	And(a=z1,b=instruction[15],out=load1);
+	And(a=instruction[2],b=neg,out=n2); // value is negative and C-instruction wants to compare to negative
+	And(a=n2,b=instruction[15],out=load2);
+	Not(in=neg,out=notneg);
+	Not(in=zero,out=notzero);
+	And(a=notneg,b=notzero,out=pos); // not neg and not zero = positive
+	And(a=pos,b=instruction[0],out=p0); // value is positive and C-instruction wants to compare to positive
+	And(a=p0,b=instruction[15],out=load3);
+	And(a=instruction[2],b=instruction[1],out=j12);
+	And(a=j12,b=instruction[0],out=j123); // if j1, j2, j3 = 1, then jump no matter what
+	And(a=j123,b=instruction[15],out=load4);
+	Or(a=load1,b=load2,out=load12);
+	Or(a=load3,b=load4,out=load34);
+	Or(a=load12,b=load34,out=loadPC);
+	PC(in=outA,inc=true,load=loadPC,reset=reset,out[0..14]=pc); // If not load and not reset, then increment
 }
