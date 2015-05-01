@@ -20,4 +20,8 @@ CHIP Computer {
 
     PARTS:
     // Put your code here:
+	// Connecting ROM (instruction memory) to CPU (control and compute) to RAM (data storage)
+	ROM32K(address=pc,out=ROMinstruction);
+	CPU(inM=outRAM,instruction=ROMinstruction,reset=reset,outM=outM,writeM=writeM,addressM=addressM,pc=pc);
+	Memory(in=outM,load=writeM,address=addressM,out=outRAM);
 }
