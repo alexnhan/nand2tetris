@@ -44,7 +44,7 @@ CHIP CPU {
 	// Logic for the A register
 	Mux16(a=instruction,b=ALUOut,sel=instruction[15],out=inA);
 	Not(in=instruction[15],out=notInstr15); // Instruction[15] = 0, means load A with Instruction[0..14]
-	Or(a=notInstr15,b=instruction[5],out=loadA);
+	Or(a=notInstr15,b=instruction[5],out=loadA); // Instruction[5]=1 means load A with ALU output
 	ARegister(in=inA,load=loadA,out=outA,out[0..14]=addressM);
 	
 	// Logic for A/M
