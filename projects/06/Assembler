@@ -217,7 +217,7 @@ namespace translater
             }
             else
             {
-                d3="0";
+                d2="0";
             }
             int findA = c_com.find("A",0);
             if(findA>-1 && findA<equalSign)
@@ -250,12 +250,11 @@ int main(int argc, char *argv[])
     int PC=0;
     int RAMLocation = 16;
     string command, hack_command;
-    fin >> command;
-    while(!fin.eof())
+    while(getline(fin,command))
     {
         if(command.substr(0,1)=="/" || command.substr(0,1)=="\n")
         {
-            int x=0;
+            ;
         }
         else if(command.substr(0,1)=="@")
         {
@@ -269,7 +268,6 @@ int main(int argc, char *argv[])
             fout << hack_command << endl;
             PC++;
         }
-        fin >> command;
     }
  
     // Closing files
