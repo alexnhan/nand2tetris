@@ -1,0 +1,117 @@
+// basic file operations
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+
+string A_dec2bin(string a_com)
+{
+	int val = stoi(a_com);
+	string out="0";
+	if((val-16384)>=0)
+	{
+		val-=16384;
+		out+="1";
+	}
+	else
+		out +="0";
+	if((val-8192)>=0)
+	{
+		val-=8192;
+		out+="1";
+	}
+	else
+		out+="0";
+	if((val-4096)>=0)
+	{
+		val-=4096;
+		out+="1";
+	}
+	else
+		out+="0";
+	if((val-2048)>=0)
+	{
+		val-=2048;
+		out+="1";
+	}
+	else
+		out+="0";
+	if((val-1024)>=0)
+	{
+		val-=1024;
+		out+="1";
+	}
+	else
+		out+="0";
+	if((val-512)>=0)
+	{
+		val-=512;
+		out+="1";
+	}
+	else
+		out+="0";
+	if((val-256)>=0)
+	{
+		val-=256;
+		out+="1";
+	}
+	else
+		out+="0";
+	if((val-128)>=0)
+	{
+		val-=128;
+		out+="1";
+	}
+	else
+		out+="0";
+	if((val-64)>=0)
+	{
+		val-=64;
+		out+="1";
+	}
+	else
+		out+="0";
+	if((val-32)>=0)
+	{
+		val-=32;
+		out+="1";
+	}
+	else
+		out+="0";
+	if((val-16)>=0)
+	{
+		val-=16;
+		out+="1";
+	}
+	else
+		out+="0";
+	if((val-8)>=0)
+	{
+		val-=8;
+		out+="1";
+	}
+	else
+		out+="0";
+	if((val-4)>=0)
+	{
+		val-=4;
+		out+="1";
+	}
+	else
+		out+="0";
+	if((val-2)>=0)
+	{
+		val-=2;
+		out+="1";
+	}
+	else
+		out+="0";
+	if((val-1)>=0)
+	{
+		val-=1;
+		out+="1";
+	}
+	else
+		out+="0";
+	return out;
+}
