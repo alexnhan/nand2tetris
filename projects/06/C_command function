@@ -121,7 +121,7 @@ string C_com2bin(string c_com)
 		if(findD>-1 && findD < equalSign)
 			d2 = "1";
 		else
-			d3="0";
+			d2="0";
 		int findA = c_com.find("A",0);
 		if(findA>-1 && findA<equalSign)
 			d1="1";
