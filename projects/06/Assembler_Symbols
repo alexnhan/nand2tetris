@@ -357,7 +357,7 @@ int main(int argc, char *argv[])
     int PC=0;
     int RAMLocation=16;
     string sym;
-    while(fin >> sym)
+    while(getline(fin,sym))
     {
         if(sym.substr(0,1)=="(")
         {
@@ -368,7 +368,7 @@ int main(int argc, char *argv[])
     fin.close();
     // Running through input file again to populate symbol table with user defined variable symbols
     fin.open(argv[argc-1]);
-    while(fin >> sym)
+    while(getline(fin,sym))
     {
         if(sym.substr(0,1)=="@")
         {
