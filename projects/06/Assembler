@@ -198,24 +198,36 @@ namespace translater
             jump="000";
         // Finding dest
         int equalSign = c_com.find("=",0);
-        if(equalSign > -1)
+        if(equalSign > -1 && equalSign < c_com.length())
         {
             string d3, d2, d1;
             int findM = c_com.find("M",0);
-            if(findM>-1 && findM < equalSign)
-                d3="1";
-            else
-                d3="0";
+            if(findM>-1 && findM < equalSign) 
+            {
+                d3 = "1";
+            }
+            else 
+            {
+                d3 = "0";
+            }
             int findD = c_com.find("D",0);
             if(findD>-1 && findD < equalSign)
+            {
                 d2 = "1";
+            }
             else
-            d3="0";
+            {
+                d3="0";
+            }
             int findA = c_com.find("A",0);
             if(findA>-1 && findA<equalSign)
+            {
                 d1="1";
+            }
             else
+            {
                 d1="0";
+            }
             dest = d1+d2+d3;
         }
         else
@@ -238,10 +250,13 @@ int main(int argc, char *argv[])
     int PC=0;
     int RAMLocation = 16;
     string command, hack_command;
-    while(fin >> command)
+    fin >> command;
+    while(!fin.eof())
     {
         if(command.substr(0,1)=="/" || command.substr(0,1)=="\n")
+        {
             int x=0;
+        }
         else if(command.substr(0,1)=="@")
         {
             hack_command=translater::A_dec2bin(command.substr(1,command.length()-1));
@@ -254,6 +269,7 @@ int main(int argc, char *argv[])
             fout << hack_command << endl;
             PC++;
         }
+        fin >> command;
     }
  
     // Closing files
