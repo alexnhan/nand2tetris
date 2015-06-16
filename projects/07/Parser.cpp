@@ -8,7 +8,8 @@ using namespace std;
 Parser::Parser(string filename)
 {
 	filename_ = filename;
-	inf.open(filename_.c_str());
+	filename = filename + ".vm";
+	inf.open(filename.c_str());
 	if (!inf.is_open())
 		cerr << "Error: Could not open " << filename << ".\n";
 }
