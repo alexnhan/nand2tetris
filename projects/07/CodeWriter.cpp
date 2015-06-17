@@ -5,8 +5,9 @@
 using namespace std;
 
 // Constructor
-CodeWriter::CodeWriter(string filename)
+CodeWriter::CodeWriter(string filename, int labelnum)
 {
+	labelnum_ = labelnum;
 	filename_ = filename;
 	filename = filename + ".asm";
 	outf.open(filename.c_str());
@@ -61,21 +62,24 @@ void CodeWriter::writeArithmetic(string command)
 	}
 	else if (command == "eq")
 	{
-		outf << "@SP" << endl << "M=M-1" << endl << "A=M" << endl << "D=M" << endl << "@SP" << endl << "M=M-1" << endl << "A=M" << endl << "D=D-M" << endl << "@EQ" << endl << "D;JEQ" << endl <<
-			"@NEQ" << endl << "D;JNE" << endl << "(EQ)" << endl << "@SP" << endl << "A=M" << endl << "M=-1" << endl << "@SP" << endl << "M=M+1" << endl << "(NEQ)" << "@SP" << endl << "A=M" << endl
-			<< "M=0" << endl << "@SP" << endl << "M=M+1" << endl;
+		outf << "@SP" << endl << "M=M-1" << endl << "A=M" << endl << "D=M" << endl << "@SP" << endl << "M=M-1" << endl << "A=M" << endl << "D=D-M" << endl << "@EQ" << labelnum_ << endl << "D;JEQ" << endl <<
+			"@NEQ" << labelnum_ << endl << "D;JNE" << endl << "(EQ" << labelnum_ << ")" << endl << "@SP" << endl << "A=M" << endl << "M=-1" << endl << "@SP" << endl << "M=M+1" << endl << "(NEQ" << labelnum_ <<
+			")" << endl <<  "@SP" << endl << "A=M" << endl << "M=0" << endl << "@SP" << endl << "M=M+1" << endl;
+		labelnum_++;
 	}
 	else if (command == "gt")
 	{
-		outf << "@SP" << endl << "M=M-1" << endl << "A=M" << endl << "D=M" << endl << "@SP" << endl << "M=M-1" << endl << "A=M" << endl << "D=D-M" << endl << "@GT" << endl << "D;JLT" << endl <<
-			"@NGT" << endl << "D;JGE" << endl << "(GT)" << endl << "@SP" << endl << "A=M" << endl << "M=-1" << endl << "@SP" << endl << "M=M+1" << endl << "(NGT)" << "@SP" << endl << "A=M" << endl
-			<< "M=0" << endl << "@SP" << endl << "M=M+1" << endl;
+		outf << "@SP" << endl << "M=M-1" << endl << "A=M" << endl << "D=M" << endl << "@SP" << endl << "M=M-1" << endl << "A=M" << endl << "D=D-M" << endl << "@GT" << labelnum_ << endl << "D;JLT" << endl <<
+			"@NGT" << labelnum_ << endl << "D;JGE" << endl << "(GT" << labelnum_ << ")" << endl << "@SP" << endl << "A=M" << endl << "M=-1" << endl << "@SP" << endl << "M=M+1" << endl << "(NGT" << labelnum_ << 
+			")" << endl << "@SP" << endl << "A=M" << endl << "M=0" << endl << "@SP" << endl << "M=M+1" << endl;
+		labelnum_++;
 	}
 	else if (command == "lt")
 	{
-		outf << "@SP" << endl << "M=M-1" << endl << "A=M" << endl << "D=M" << endl << "@SP" << endl << "M=M-1" << endl << "A=M" << endl << "D=D-M" << endl << "@LT" << endl << "D;JGT" << endl <<
-			"@NLT" << endl << "D;JLE" << endl << "(LT)" << endl << "@SP" << endl << "A=M" << endl << "M=-1" << endl << "@SP" << endl << "M=M+1" << endl << "(NLT)" << "@SP" << endl << "A=M" << endl
-			<< "M=0" << endl << "@SP" << endl << "M=M+1" << endl;
+		outf << "@SP" << endl << "M=M-1" << endl << "A=M" << endl << "D=M" << endl << "@SP" << endl << "M=M-1" << endl << "A=M" << endl << "D=D-M" << endl << "@LT" << labelnum_ << endl << "D;JGT" << endl <<
+			"@NLT" << labelnum_ << endl << "D;JLE" << endl << "(LT" << labelnum_ << ")" << endl << "@SP" << endl << "A=M" << endl << "M=-1" << endl << "@SP" << endl << "M=M+1" << endl <<"(NLT" << labelnum_ <<
+			")" << endl << "@SP" << endl << "A=M" << endl << "M=0" << endl << "@SP" << endl << "M=M+1" << endl;
+		labelnum_++;
 	}
 }
 
@@ -120,9 +124,38 @@ void CodeWriter::writePushPop(VMcommand pushOrPop, string segment, int index)
 	{
 		if (segment == "local")
 		{
-			outf << "@SP" << endl << "M=M-1" << endl << "A=M" << endl << "D=M" << endl << "@R13" << endl << "M=D" << endl << "@LCL" << endl << "D=M" << endl << "@" << index << endl << "D=A+D" << endl
-				<< "@R14" << endl << "M=D" << endl << "@R13" << endl << "D=M" << endl << "@R14" << endl << "A=M" << endl << "M=D" << endl;
+			outf << "@LCL" << endl << "D=M" << endl << "@" << index << endl << "D=D+A" << endl << "@R13" << endl << "M=D" << endl << "@SP" << endl << "M=M-1" << endl << "A=M" << endl << "D=M" << endl
+				<< "@R13" << endl << "A=M" << endl << "M=D" << endl;
 		}
-
+		else if (segment == "argument")
+		{
+			outf << "@ARG" << endl << "D=M" << endl << "@" << index << endl << "D=D+A" << endl << "@R13" << endl << "M=D" << endl << "@SP" << endl << "M=M-1" << endl << "A=M" << endl << "D=M" << endl
+				<< "@R13" << endl << "A=M" << endl << "M=D" << endl;
+		}
+		else if (segment == "this")
+		{
+			outf << "@THIS" << endl << "D=M" << endl << "@" << index << endl << "D=D+A" << endl << "@R13" << endl << "M=D" << endl << "@SP" << endl << "M=M-1" << endl << "A=M" << endl << "D=M" << endl
+				<< "@R13" << endl << "A=M" << endl << "M=D" << endl;
+		}
+		else if (segment == "that")
+		{
+			outf << "@THAT" << endl << "D=M" << endl << "@" << index << endl << "D=D+A" << endl << "@R13" << endl << "M=D" << endl << "@SP" << endl << "M=M-1" << endl << "A=M" << endl << "D=M" << endl
+				<< "@R13" << endl << "A=M" << endl << "M=D" << endl;
+		}
+		else if (segment == "pointer")
+		{
+			outf << "@3" << endl << "D=A" << endl << "@" << index << endl << "D=D+A" << endl << "@R13" << endl << "M=D" << endl << "@SP" << endl << "M=M-1" << endl << "A=M" << endl << "D=M" << endl
+				<< "@R13" << endl << "A=M" << endl << "M=D" << endl;
+		}
+		else if (segment == "temp")
+		{
+			outf << "@5" << endl << "D=A" << endl << "@" << index << endl << "D=D+A" << endl << "@R13" << endl << "M=D" << endl << "@SP" << endl << "M=M-1" << endl << "A=M" << endl << "D=M" << endl
+				<< "@R13" << endl << "A=M" << endl << "M=D" << endl;
+		}
+		else if (segment == "static")
+		{
+			outf << "@" << filename_ << "." << index << endl << "D=A" << endl << "@R13" << endl << "M=D" << endl << "@SP" << endl << "M=M-1" << endl << "A=M" << endl << "D=M" << endl << "@R13" <<
+				endl << "A=M" << endl << "M=D" << endl;
+		}
 	}
 }
