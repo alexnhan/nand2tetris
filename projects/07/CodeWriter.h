@@ -11,7 +11,7 @@ class CodeWriter
 {
 public:
 	// Constructor
-	CodeWriter(string filename); // Opens output file
+	CodeWriter(string filename,int labelnum=0); // Opens output file
 
 	// Destructor
 	~CodeWriter();
@@ -25,6 +25,7 @@ public:
 private:
 	string filename_;
 	ofstream outf;
+	int labelnum_;
 };
 
 #endif
