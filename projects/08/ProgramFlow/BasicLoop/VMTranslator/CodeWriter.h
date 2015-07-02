@@ -39,9 +39,11 @@ public:
 	void getReturn(int regNum); // Jumps back to location stored in GPR
 	void push(string loc, int i); // pushes value of *(location+index) to top of stack
 	void pop(string loc, int i); // pops top of stack value to location+index address
+	void setOutputFileName(string outname); // sets the output file name, as the directory
 	
 private:
 	string filename_;
+	string functionName_;
 	ofstream outf;
 	int labelnum_;
 	int start_;

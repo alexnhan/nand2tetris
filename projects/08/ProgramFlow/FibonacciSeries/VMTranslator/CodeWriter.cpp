@@ -233,7 +233,7 @@ void CodeWriter::writeInit(void)
 	incSP();
 	getReturn(15);
 	outf << "(START" << start_ << ")" << endl;
-	//writeCall("Sys.init",0); // BasicLoop does not use Bootstrap code of Sys.init. Commenting this out during backwards compatibility testing.
+	//writeCall("Sys.init",0); // FibonacciSeries does not use bootstrap code, thus commenting out during backwards compatibility testing
 	start_++;
 }
 

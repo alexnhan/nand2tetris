@@ -6,16 +6,26 @@
 #include "CodeWriter.cpp"
 using namespace std;
 
+/* To use this vm translator. Compile then in command window run this main script along with a vm file to translate, or if translating several vm files, first provide the director name and then all the vm files needed to be translated. */
+
 int main(int argc, char *argv[])
 {
 	CodeWriter asm1;
+	Parser vm1;
 	for(int i=1;i<argc;i++)
 	{
 		string filename = argv[i];
 		int dot = filename.find(".",0);
-		filename = filename.substr(0,dot);
-		Parser vm1(filename);
-		asm1.setFileName(filename);
+		if(dot == -1)
+		{
+			asm1.setOutputFileName(filename); // directory name is the output .asm file name
+		}
+		else
+		{
+			filename = filename.substr(0,dot);
+			vm1.setFileName(filename);
+			asm1.setFileName(filename);
+		}
 		while (vm1.hasMoreCommands())
 		{
 			vm1.advance();
@@ -54,11 +64,6 @@ int main(int argc, char *argv[])
 			else if(vm1.commandType() == C_CALL)
 			{
 				asm1.writeCall(vm1.arg1(), vm1.arg2());
-			}
-			else
-			{
-				cerr << "Invalid VM function" << endl;
-				exit(1);
 			}
 		}
 	}

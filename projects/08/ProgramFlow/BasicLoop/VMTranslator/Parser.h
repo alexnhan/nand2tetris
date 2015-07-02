@@ -13,6 +13,7 @@ class Parser
 {
 public:
 	// Constructor
+	Parser();
 	Parser(string filename);
 
 	// Destructor
@@ -24,6 +25,7 @@ public:
 	VMcommand commandType(void); // returns the type of the current VM command
 	string arg1(void); // returns the first argument of the current command
 	int arg2(void); // returns the second argument of the current command
+	void setFileName(string filename);
 
 private: // Attributes
 	string filename_;

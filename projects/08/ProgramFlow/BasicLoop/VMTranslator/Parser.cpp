@@ -5,6 +5,11 @@
 using namespace std;
 
 // Constructor
+Parser::Parser()
+{
+	filename_="";
+}
+
 Parser::Parser(string filename)
 {
 	filename_ = filename;
@@ -62,7 +67,13 @@ VMcommand Parser::commandType(void)
 string Parser::arg1(void)
 {
 	VMcommand ct = commandType();
-	if (ct != C_RETURN)
+	if (ct == C_ARITHMETIC)
+	{
+		int firstSpace = currentCommand_.find(" ",0);
+		string a1 = currentCommand_.substr(0,firstSpace);
+		return a1;
+	}
+	else if (ct != C_RETURN)
 	{
 		int firstSpace = currentCommand_.find(" ", 0);
 		int secondSpace = currentCommand_.find(" ", firstSpace + 1);
@@ -83,4 +94,15 @@ int Parser::arg2(void)
 		int a2i = stoi(a2);
 		return a2i;
 	}
+}
+
+void Parser::setFileName(string filename)
+{
+	filename_=filename;
+	filename = filename + ".vm";
+	if(inf.is_open())
+		inf.close();
+	inf.open(filename.c_str());
+	if (!inf.is_open())
+		cerr << "Error: Could not open " << filename << ".\n";
 }
