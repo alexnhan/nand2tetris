@@ -1,0 +1,29 @@
+/* Simple guess my number game */
+class Main {
+	function void main() {
+		var int myNum, guess, maxGuesses, guessCount;
+		let myNum = 5;
+		let maxGuesses = 3;
+		let guessCount = 0;
+		let guess = Keyboard.readInt("Guess a number between 1 and 10: ");
+		let guessCount = guessCount + 1;
+		while(~(guess = myNum) & (guessCount < maxGuesses))
+		{
+			let guess = Keyboard.readInt("Wrong, guess another number between 1 and 10: ");
+			let guessCount = guessCount + 1;
+		}
+		if(~(guess = myNum))
+		{
+			do Output.printString("You failed to guess my number within ");
+			do Output.printInt(maxGuesses);
+			do Output.printString(" tries.");
+			do Output.println();
+		}
+		else
+		{
+			do Output.printString("Congratulations, you correctly guessed my number.");
+			do Output.println();
+		}
+		return;
+	}
+}
