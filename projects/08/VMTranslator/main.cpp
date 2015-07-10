@@ -6,7 +6,8 @@
 #include "CodeWriter.cpp"
 using namespace std;
 
-/* To use this vm translator. Compile then in command window run this main script along with a vm file to translate, or if translating several vm files, first provide the director name and then all the vm files needed to be translated. */
+/* To use this vm translator. Compile then in command window run this main script along with a vm file to translate, or if translating several vm files, first provide the directory name and then all the vm files needed to be translated. */
+/* For now, this code and the classes have to be in the same file as the vm code you want to translate. */
 
 int main(int argc, char *argv[])
 {
