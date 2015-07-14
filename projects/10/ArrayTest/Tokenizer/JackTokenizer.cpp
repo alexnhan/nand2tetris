@@ -40,6 +40,12 @@ bool JackTokenizer::hasMoreTokens(void)
 	return !fin_.eof();
 }
 
+JackTokenizer::~JackTokenizer()
+{
+	if(fin_.is_open())
+		fin_.close();
+}
+
 void JackTokenizer::advance(void)
 {
 	if(hasMoreTokens())

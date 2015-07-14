@@ -16,6 +16,8 @@ class JackTokenizer
 public:
 	// Constructor
 	JackTokenizer(string inputFile); // Opens the input file and gets ready to tokenize it
+	// Destructor
+	~JackTokenizer();
 	
 	// Methods
 	bool hasMoreTokens(void); // Do we have more tokens in the input?
