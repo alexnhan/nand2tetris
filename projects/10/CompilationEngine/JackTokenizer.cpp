@@ -34,6 +34,13 @@ JackTokenizer::JackTokenizer(string inputFile)
 	currentToken_="";
 }
 
+// Destructor
+JackTokenizer::~JackTokenizer()
+{
+	if(fin_.is_open())
+		fin_.close();
+}
+
 // Methods
 bool JackTokenizer::hasMoreTokens(void)
 {
@@ -88,82 +95,66 @@ keyword JackTokenizer::keyWord(void)
 	assert(tokenType() == KEYWORD);
 	if(currentToken_ == "class") 
 	{
-		currentToken_ = "";
 		return CLASS;
 	}
 	else if(currentToken_ == "method") 
 	{
-		currentToken_ = "";
 		return METHOD;
 	}
 	else if(currentToken_ == "function") 
 	{
-		currentToken_ = "";
 		return FUNCTION;
 	}
 	else if(currentToken_ == "constructor")
 	{
-		currentToken_ = "";
 		return CONSTRUCTOR;
 	}
 	else if(currentToken_ == "int")
 	{
-		currentToken_ = "";
 		return INT;
 	}
 	else if(currentToken_ == "boolean") 
 	{
-		currentToken_ = "";
 		return BOOLEAN;
 	}
 	else if(currentToken_ == "char")
 	{
-		currentToken_ = "";
 		return CHAR;
 	}
 	else if(currentToken_ == "void")
 	{
-		currentToken_ = "";
 		return VOID;
 	}
 	else if(currentToken_ == "var")
 	{
-		currentToken_ = "";
 		return VAR;
 	}
 	else if(currentToken_ == "static") 
 	{
-		currentToken_ = "";
 		return STATIC;
 	}
 	else if(currentToken_ == "field")
 	{
-		currentToken_ = "";
 		return FIELD;
 	}
 	else if(currentToken_ == "let")
 	{
-		currentToken_ = "";
 		return LET;
 	}
 	else if(currentToken_ == "do") 
 	{
-		currentToken_ = "";
 		return DO;
 	}
 	else if(currentToken_ == "if")
 	{
-		currentToken_ = "";
 		return IF;
 	}
 	else if(currentToken_ == "else") 
 	{
-		currentToken_ = "";
 		return ELSE;
 	}
 	else if(currentToken_ == "while") 
 	{
-		currentToken_ = "";
 		return WHILE;
 	}
 	else if(currentToken_ == "return" || currentToken_ == "return;") 

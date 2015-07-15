@@ -4,10 +4,7 @@
 #include "CompilationEngine.cpp"
 #include <iostream>
 #include <string>
-#include <fstream>
 using namespace std;
-
-string keyWord2String(keyword Key);
 
 int main(int argc, char *argv[])
 {
@@ -28,9 +25,9 @@ int main(int argc, char *argv[])
 			{
 				JackTokenizer JT(filename);
 				string outputFile = filename.substr(0,dotJack) + ".xml";
-				ofstream fout(outputFile.c_str());
-				fout << "<tokens>" << endl;
-				while(JT.hasMoreTokens())
+				CompilationEngine CE(&JT,outputFile);
+				
+				/*while(JT.hasMoreTokens())
 				{
 					JT.advance();
 					while(JT.getCurrentToken() != "")
@@ -79,59 +76,8 @@ int main(int argc, char *argv[])
 								break;
 						}
 					}
-				}
-				fout << "</tokens>" << endl;
-				fout.close();
+				}*/
 			}
 		}
-	}
-}
-
-string keyWord2String(keyword Key)
-{
-	switch(Key)
-	{
-		case CLASS:
-			return "class";
-		case METHOD:
-			return "method";
-		case FUNCTION:
-			return "function";
-		case CONSTRUCTOR:
-			return "constructor";
-		case INT:
-			return "int";
-		case BOOLEAN:
-			return "boolean";
-		case CHAR:
-			return "char";
-		case VOID:
-			return "void";
-		case VAR:
-			return "var";
-		case STATIC:
-			return "static";
-		case FIELD:
-			return "field";
-		case LET:
-			return "let";
-		case DO:
-			return "do";
-		case IF:
-			return "if";
-		case ELSE:
-			return "else";
-		case WHILE:
-			return "while";
-		case RETURN:
-			return "return";
-		case TRUE:
-			return "true";
-		case FALSE:
-			return "false";
-		case null:
-			return "null";
-		case THIS:
-			return "this";
 	}
 }
