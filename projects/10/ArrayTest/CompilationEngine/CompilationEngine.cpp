@@ -403,7 +403,7 @@ void CompilationEngine::compileExpressionList(void)
 	fout_ << "</expressionList>" << endl;
 }
 
-void CompilationEngine::compileDo() // TODO: fix do
+void CompilationEngine::compileDo()
 {
 	fout_ << "<doStatement>" << endl;
 	fout_ << "<keyword> " << CEhelper::keyWord2String(JT_->keyWord()) << " </keyword>" << endl;
