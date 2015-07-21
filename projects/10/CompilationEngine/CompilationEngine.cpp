@@ -408,3 +408,78 @@ void CompilationEngine::compileDo()
 	JT_->advance();
 	fout_ << "</doStatement>" << endl;
 }
+
+void CompilationEngine::compileLet(void)
+{
+	fout_ << "<letStatement>" << endl;
+	fout_ << "<keyword> " << CEhelper::keyWord2String(JT_->keyWord()) << " </keyword>" << endl;
+	JT_->advance();
+	fout_ << "<identifier> " << JT_->identifier() << " </identifier>" << endl;
+	JT_->updateCurrentToken();
+	if(JT_->symbol() == '[')
+	{
+		fout_ << "<symbol> " << JT_->symbol() << " </symbol>" << endl;
+		JT_->updateCurrentToken();
+		if(JT_->getCurrentToken() == "")
+			JT_->advance();
+		compileExpression();
+		if(JT_->symbol() == ']')
+		{
+			fout_ << "<symbol>" << JT_->symbol() << " </symbol>" << endl;
+			JT_->updateCurrentToken();
+			if(JT_->getCurrentToken() == "")
+				JT_->advance();
+		}
+	}
+	if(JT_->symbol() == '=')
+	{
+		fout_ << "<symbol> " << JT_->symbol() << " </symbol>" << endl;
+		JT_->updateCurrentToken();
+		if(JT_->getCurrentToken() == "")
+			JT_->advance();
+		compileExpression();
+	}
+	if(JT_->symbol() == ';')
+	{
+		fout_ << "<symbol> " << JT_->symbol() << " </symbol>" << endl;
+	}
+	JT->advance();
+	fout_ << "</letStatement>" << endl;
+}
+
+void CompilationEngine::compileWhile(void)
+{
+	fout_ << "<whileStatement>" << endl;
+	fout_ << "<keyword> " << CEhelper::keyWord2String(JT_->keyWord()) << " </keyword>" << endl;
+	JT_->updateCurrentToken();
+	if(JT_->getCurrentToken() == "")
+		JT_->advance();
+	assert(JT_->symbol() == '(');
+	fout_ << "<symbol> " << JT_->symbol() << " </symbol>" << endl;
+	JT_->updateCurrentToken();
+	if(JT_->getCurrentToken() == "")
+		JT_->advance();
+	compileExpression();
+	assert(JT_->symbol() == ')');
+	fout_ << "<symbol> " << JT_->symbol() << " </symbol>" << endl;
+	JT_->updateCurrentToken();
+	if(JT_->getCurrentToken() == "")
+		JT_->advance();
+	assert(JT_->symbol() == '{');
+	fout_ << "<symbol> " << JT_->symbol() << " </symbol>" << endl;
+	JT_->updateCurrentToken();
+	if(JT_->getCurrentToken() == "")
+		JT_->advance();
+	compileStatements();
+	assert(JT_->symbol() == '}');
+	fout_ << "<symbol> " << JT_->symbol() << " </symbol>" << endl;
+	JT_->updateCurrentToken();
+	if(JT_->getCurrentToken() == "")
+		JT_->advance();
+}
+
+void CompilationEngine::compileReturn(void)
+{
+	
+	
+}

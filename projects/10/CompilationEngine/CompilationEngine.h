@@ -29,7 +29,7 @@ public:
 	void compileIf(void); // Compiles an if statement, possible with a trailing else clause
 	void compileExpression(void); // Compiles an expression
 	void compileTerm(void); // Compiles a term.  Uses a single lookahead
-	void compileExpressionList(void); // Compiles a (possibly empty) comman-separated list of expressions
+	void compileExpressionList(void); // Compiles a (possibly empty) comma-separated list of expressions
 	
 private:
 	JackTokenizer * JT_;
