@@ -86,7 +86,7 @@ void CompilationEngine::compileClass(void)
 	assert(JT_->symbol() == '{');
 	fout_ << "<symbol> { </symbol>" << endl;
 	JT_->advance();
-	while(JT_->keyWord() == STATIC || JT_->keyWord() == FIELD || JT_->keyWord() == CONSTRUCTOR || JT_->keyWord() == FUNCTION || JT_->keyWord() == METHOD || JT_->keyWord() == VOID)
+	while((JT_->tokenType() == KEYWORD) && (JT_->keyWord() == STATIC || JT_->keyWord() == FIELD || JT_->keyWord() == CONSTRUCTOR || JT_->keyWord() == FUNCTION || JT_->keyWord() == METHOD || JT_->keyWord() == VOID))
 	{
 		switch(JT_->keyWord())
 		{
@@ -104,7 +104,6 @@ void CompilationEngine::compileClass(void)
 				break;
 		}
 	}
-	JT_->advance();
 	assert(JT_->symbol() == '}');
 	fout_ << "<symbol> } </symbol>" << endl;
 	fout_ << "</class>" << endl;
@@ -143,6 +142,7 @@ void CompilationEngine::compileClassVarDec(void)
 	assert(JT_->symbol() == ';');
 	fout_ << "<symbol> ; </symbol>" << endl;
 	fout_ << "</classVarDec>" << endl;
+	JT_->advance();
 }
 
 void CompilationEngine::compileSubroutine(void)
@@ -184,6 +184,7 @@ void CompilationEngine::compileSubroutine(void)
 			compileSubroutineBody();
 	}
 	fout_ << "</subroutineDec>" << endl;
+	JT_->advance();
 }
 
 void CompilationEngine::compileParameterList(void)
@@ -224,7 +225,6 @@ void CompilationEngine::compileSubroutineBody(void)
 		compileStatements();
 	if(JT_->symbol() == '}')
 		fout_ << "<symbol> " << JT_->symbol() << " </symbol>" << endl;
-	JT_->advance();
 	fout_ << "</subroutineBody>" << endl;
 }
 
@@ -291,7 +291,7 @@ void CompilationEngine::compileExpression(void)
 {
 	fout_ << "<expression>" << endl;
 	compileTerm();
-	while(JT_->getCurrentToken().substr(0,1) != ";" && JT_->getCurrentToken().substr(0,1) != "}" && JT_->getCurrentToken().substr(0,1) != "]" && JT_->getCurrentToken().substr(0,1) != ")")
+	while(JT_->getCurrentToken().substr(0,1) != ";" && JT_->getCurrentToken().substr(0,1) != "}" && JT_->getCurrentToken().substr(0,1) != "]" && JT_->getCurrentToken().substr(0,1) != ")" && JT_->getCurrentToken().substr(0,1) != ",")
 	{
 		switch(JT_->tokenType())
 		{
@@ -307,6 +307,7 @@ void CompilationEngine::compileExpression(void)
 				JT_->updateCurrentToken();
 				if(JT_->getCurrentToken() == "")
 					JT_->advance();
+				compileTerm();
 				break;
 			default:
 				compileTerm();
@@ -337,7 +338,9 @@ void CompilationEngine::compileTerm(void)
 					if(JT_->symbol() == ')')
 					{
 						fout_ << "<symbol> " << JT_->symbol() << " </symbol>" << endl;
-						JT_->advance();
+						JT_->updateCurrentToken();
+						if(JT_->getCurrentToken() == "")
+							JT_->advance();
 					}
 				}
 				else if(JT_->symbol() == '.')
@@ -380,12 +383,29 @@ void CompilationEngine::compileTerm(void)
 		case STRING_CONST:
 			fout_ << "<stringConstant> " << JT_->stringVal() << " </stringConstant>" << endl;
 			break;
-		case KEYWORD:
-			fout_ << "<keyword> " << JT_->keyWord() << " </keyword>" << endl;
+		case KEYWORD: // true, false, null, this will automatically update current token when calling keyWord()
+			fout_ << "<keyword> " << CEhelper::keyWord2String(JT_->keyWord()) << " </keyword>" << endl;
 			break;
 		case SYMBOL:
-			fout_ << "<symbol> " << JT_->symbol() << " </symbol>" << endl;
-			JT_->updateCurrentToken();
+			if(JT_->symbol() == '(')
+			{
+				fout_ << "<symbol> " << JT_->symbol() << " </symbol>" << endl;
+				JT_->updateCurrentToken();
+				if(JT_->getCurrentToken() == "")
+					JT_->advance();
+				compileExpression();
+				assert(JT_->symbol() == ')');
+				fout_ << "<symbol> " << JT_->symbol() << " </symbol>" << endl;
+				JT_->updateCurrentToken();
+			}
+			else //unaryOp term
+			{
+				fout_ << "<symbol> " << JT_->symbol() << " </symbol>" << endl;
+				JT_->updateCurrentToken();
+				if(JT_->getCurrentToken() == "")
+					JT_->advance();
+				compileTerm();
+			}
 			break;
 	}
 	if(JT_->getCurrentToken() == "")
@@ -399,18 +419,62 @@ void CompilationEngine::compileExpressionList(void)
 	while(JT_->getCurrentToken().substr(0,1) != ")")
 	{
 		compileExpression();
+		if(JT_->getCurrentToken().substr(0,1)==",")
+		{
+			fout_ << "<symbol> " << JT_->symbol() << " </symbol>" << endl;
+			JT_->updateCurrentToken();
+			if(JT_->getCurrentToken() == "")
+				JT_->advance();
+		}
 	}
 	fout_ << "</expressionList>" << endl;
 }
 
-void CompilationEngine::compileDo()
+void CompilationEngine::compileDo() // TODO: fix do
 {
 	fout_ << "<doStatement>" << endl;
 	fout_ << "<keyword> " << CEhelper::keyWord2String(JT_->keyWord()) << " </keyword>" << endl;
 	JT_->advance();
-	compileExpression();
-	if(JT_->symbol() == ';')
+	// subroutine call
+	fout_ << "<identifier> " << JT_->identifier() << " </identifier>" << endl;
+	if(JT_->symbol() == '(')
+	{
 		fout_ << "<symbol> " << JT_->symbol() << " </symbol>" << endl;
+		JT_->updateCurrentToken();
+		if(JT_->getCurrentToken() == "")
+			JT_->advance();
+		compileExpressionList();
+		if(JT_->symbol() == ')')
+		{
+			fout_ << "<symbol> " << JT_->symbol() << " </symbol>" << endl;
+			JT_->updateCurrentToken();
+			if(JT_->getCurrentToken() == "")
+				JT_->advance();
+		}
+	}
+	else if(JT_->symbol() == '.')
+	{
+		fout_ << "<symbol> " << JT_->symbol() << " </symbol>" << endl;
+		JT_->updateCurrentToken();
+		fout_ << "<identifier> " << JT_->identifier() << " </identifier>" << endl;
+		if(JT_->symbol() == '(')
+		{
+			fout_ << "<symbol> " << JT_->symbol() << " </symbol>" << endl;
+			JT_->updateCurrentToken();
+		}
+		if(JT_->getCurrentToken() == "")
+			JT_->advance();
+		compileExpressionList();
+		if(JT_->symbol() == ')')
+		{
+			fout_ << "<symbol> " << JT_->symbol() << " </symbol>" << endl;
+			JT_->updateCurrentToken();
+			if(JT_->getCurrentToken() == "")
+				JT_->advance();
+		}
+	}
+	assert(JT_->symbol() == ';');
+	fout_ << "<symbol> " << JT_->symbol() << " </symbol>" << endl;
 	JT_->advance();
 	fout_ << "</doStatement>" << endl;
 }
@@ -427,7 +491,6 @@ void CompilationEngine::compileLet(void)
 	{
 		fout_ << "<symbol> " << JT_->symbol() << " </symbol>" << endl;
 		JT_->updateCurrentToken();
-		cout << JT_->getCurrentToken() << "yo" << endl;
 		if(JT_->getCurrentToken() == "")
 			JT_->advance();
 		compileExpression();
@@ -491,15 +554,19 @@ void CompilationEngine::compileReturn(void)
 {
 	fout_ << "<returnStatement>" << endl;
 	fout_ << "<keyword> " << CEhelper::keyWord2String(JT_->keyWord()) << " </keyword>" << endl;
-	if(JT_->getCurrentToken() == "")
+	if(JT_->getCurrentToken() == "return")
+	{
 		JT_->advance();
-	if(JT_->getCurrentToken() != ";")
 		compileExpression();
-	assert(JT_->symbol() == ';');
-	fout_ << "<symbol> " << JT_->symbol() << " </symbol>" << endl;
-	JT_->updateCurrentToken();
-	if(JT_->getCurrentToken() == "")
+		assert(JT_->symbol() == ';');
+		fout_ << "<symbol> " << JT_->symbol() << " </symbol>" << endl;
 		JT_->advance();
+	}
+	else if(JT_->getCurrentToken() == "return;")
+	{
+		fout_ << "<symbol> " << ";" << " </symbol>" << endl;
+		JT_->advance();		
+	}
 	fout_ << "</returnStatement>" << endl;
 }
 
@@ -508,6 +575,7 @@ void CompilationEngine::compileIf(void)
 	fout_ << "<ifStatement>" << endl;
 	fout_ << "<keyword> " << CEhelper::keyWord2String(JT_->keyWord()) << " </keyword>" << endl;
 	JT_->updateCurrentToken();
+	JT_->updateCurrentToken(); // done twice since "if" is 2 letters
 	if(JT_->getCurrentToken() == "")
 		JT_->advance();
 	assert(JT_->symbol() == '(');

@@ -159,10 +159,6 @@ keyword JackTokenizer::keyWord(void)
 	}
 	else if(currentToken_ == "return" || currentToken_ == "return;") 
 	{
-		if(currentToken_ == "return")
-			currentToken_ = "";
-		else
-			currentToken_ = ";";
 		return RETURN;
 	}
 	else if(currentToken_ == "true" || currentToken_ == "true;" || currentToken_ == "true)" || currentToken_ == "true);") 

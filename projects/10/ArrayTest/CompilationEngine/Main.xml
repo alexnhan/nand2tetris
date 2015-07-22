@@ -229,8 +229,6 @@
 </whileStatement>
 <doStatement>
 <keyword> do </keyword>
-<expression>
-<term>
 <identifier> Output </identifier>
 <symbol> . </symbol>
 <identifier> printString </identifier>
@@ -243,14 +241,10 @@
 </expression>
 </expressionList>
 <symbol> ) </symbol>
-</term>
-</expression>
 <symbol> ; </symbol>
 </doStatement>
 <doStatement>
 <keyword> do </keyword>
-<expression>
-<term>
 <identifier> Output </identifier>
 <symbol> . </symbol>
 <identifier> printInt </identifier>
@@ -267,14 +261,10 @@
 </expression>
 </expressionList>
 <symbol> ) </symbol>
-</term>
-</expression>
 <symbol> ; </symbol>
 </doStatement>
 <doStatement>
 <keyword> do </keyword>
-<expression>
-<term>
 <identifier> Output </identifier>
 <symbol> . </symbol>
 <identifier> println </identifier>
@@ -282,7 +272,15 @@
 <expressionList>
 </expressionList>
 <symbol> ) </symbol>
-</term>
-</expression>
 <symbol> ; </symbol>
 </doStatement>
+<returnStatement>
+<keyword> return </keyword>
+<symbol> ; </symbol>
+</returnStatement>
+</statements>
+<symbol> } </symbol>
+</subroutineBody>
+</subroutineDec>
+<symbol> } </symbol>
+</class>
