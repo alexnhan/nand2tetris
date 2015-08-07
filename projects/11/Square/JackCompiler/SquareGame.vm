@@ -1,0 +1,190 @@
+function SquareGame.new 0
+push constant 2
+call Memory.alloc 1
+pop pointer 0
+push constant 0
+push constant 0
+push constant 30
+call Square.new 3
+pop this 0
+push constant 0
+pop this 1
+push pointer 0
+return
+function SquareGame.dispose 0
+push argument 0
+pop pointer 0
+push this 0
+call Square.dispose 1
+pop temp 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return
+function SquareGame.run 2
+push argument 0
+pop pointer 0
+push constant 0
+pop local 1
+label WHILETRUE0
+push local 1
+not
+not
+if-goto WHILEFALSE0
+label WHILETRUE1
+push local 0
+push constant 0
+eq
+not
+if-goto WHILEFALSE1
+call Keyboard.keyPressed 0
+pop local 0
+push pointer 0
+call SquareGame.moveSquare 1
+pop temp 0
+goto WHILETRUE1
+label WHILEFALSE1
+push local 0
+push constant 81
+eq
+not
+if-goto IFFALSE2
+push constant 0
+not
+pop local 1
+goto CONTINUE2
+label IFFALSE2
+label CONTINUE2
+push local 0
+push constant 90
+eq
+not
+if-goto IFFALSE3
+push this 0
+call Square.decSize 1
+pop temp 0
+goto CONTINUE3
+label IFFALSE3
+label CONTINUE3
+push local 0
+push constant 88
+eq
+not
+if-goto IFFALSE4
+push this 0
+call Square.incSize 1
+pop temp 0
+goto CONTINUE4
+label IFFALSE4
+label CONTINUE4
+push local 0
+push constant 131
+eq
+not
+if-goto IFFALSE5
+push constant 1
+pop this 1
+goto CONTINUE5
+label IFFALSE5
+label CONTINUE5
+push local 0
+push constant 133
+eq
+not
+if-goto IFFALSE6
+push constant 2
+pop this 1
+goto CONTINUE6
+label IFFALSE6
+label CONTINUE6
+push local 0
+push constant 130
+eq
+not
+if-goto IFFALSE7
+push constant 3
+pop this 1
+goto CONTINUE7
+label IFFALSE7
+label CONTINUE7
+push local 0
+push constant 132
+eq
+not
+if-goto IFFALSE8
+push constant 4
+pop this 1
+goto CONTINUE8
+label IFFALSE8
+label CONTINUE8
+label WHILETRUE9
+push local 0
+push constant 0
+eq
+not
+not
+if-goto WHILEFALSE9
+call Keyboard.keyPressed 0
+pop local 0
+push pointer 0
+call SquareGame.moveSquare 1
+pop temp 0
+goto WHILETRUE9
+label WHILEFALSE9
+goto WHILETRUE0
+label WHILEFALSE0
+push constant 0
+return
+function SquareGame.moveSquare 0
+push argument 0
+pop pointer 0
+push this 1
+push constant 1
+eq
+not
+if-goto IFFALSE10
+push this 0
+call Square.moveUp 1
+pop temp 0
+goto CONTINUE10
+label IFFALSE10
+label CONTINUE10
+push this 1
+push constant 2
+eq
+not
+if-goto IFFALSE11
+push this 0
+call Square.moveDown 1
+pop temp 0
+goto CONTINUE11
+label IFFALSE11
+label CONTINUE11
+push this 1
+push constant 3
+eq
+not
+if-goto IFFALSE12
+push this 0
+call Square.moveLeft 1
+pop temp 0
+goto CONTINUE12
+label IFFALSE12
+label CONTINUE12
+push this 1
+push constant 4
+eq
+not
+if-goto IFFALSE13
+push this 0
+call Square.moveRight 1
+pop temp 0
+goto CONTINUE13
+label IFFALSE13
+label CONTINUE13
+push constant 5
+call Sys.wait 1
+pop temp 0
+push constant 0
+return
