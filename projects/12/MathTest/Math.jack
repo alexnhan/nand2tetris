@@ -6,39 +6,39 @@
 /**
  * A basic math library.
  */
-class Math {
-	static int twoToThe;
+class Math {	
+	static Array twoToThe;
     /** Initializes the library. */
     function void init() {
 		let twoToThe = Array.new(16);
 		let twoToThe[0] = 1;
-		let twoTothe[1] = 2;
-		let twoTothe[2] = 4;
-		let twoTothe[3] = 8;
-		let twoTothe[4] = 16;
-		let twoTothe[5] = 32;
-		let twoTothe[6] = 64;
-		let twoTothe[7] = 128;
-		let twoTothe[8] = 256;
-		let twoTothe[9] = 512;
-		let twoTothe[10] = 1024;
-		let twoTothe[11] = 2048;
-		let twoTothe[12] = 4096;
-		let twoTothe[13] = 8192;
-		let twoTothe[14] = 16384;
-		let twoTothe[15] = 16384+16384;
+		let twoToThe[1] = 2;
+		let twoToThe[2] = 4;
+		let twoToThe[3] = 8;
+		let twoToThe[4] = 16;
+		let twoToThe[5] = 32;
+		let twoToThe[6] = 64;
+		let twoToThe[7] = 128;
+		let twoToThe[8] = 256;
+		let twoToThe[9] = 512;
+		let twoToThe[10] = 1024;
+		let twoToThe[11] = 2048;
+		let twoToThe[12] = 4096;
+		let twoToThe[13] = 8192;
+		let twoToThe[14] = 16384;
+		let twoToThe[15] = 16384 + 16384; // cannot represent 32768 as a single value, it is too large
 		return;
     }
 	
 	function boolean bit(int x, int j)
 	{
-		if((x & twoToThe[j]) > 0)
+		if((x & twoToThe[j]) = 0)
 		{
-			return true;
+			return false;
 		}
 		else
 		{
-			return false;
+			return true;
 		}
 	}
 
@@ -62,46 +62,67 @@ class Math {
 		let j = 0;
 		while(j<16)
 		{
-			if(bit(y,j) = true)
+			if(Math.bit(y,j) = true)
 			{
-				sum = sum+shiftedX;
+				let sum = sum+shiftedX;
 			}
 			let shiftedX = shiftedX+shiftedX;
 			let j = j+1;
 		}
+		return sum;
     }
 
     /** Returns the integer part of x/y. */
     function int divide(int x, int y) {
+		var int q, nx, ny, r;
+		let nx = x<0;
+		let ny = y<0;
+		let x = Math.abs(x);
+		let y = Math.abs(y); // divide with positive values of x and y, and determine sign at the end
 		if(y > x)
 		{
 			return 0;
 		}
-		var int q;
-		let q = divide(x,multiply(2,y));
-		if(x-(multiply(2,multiply(q,y)))<y)
+		let q = Math.divide(x,y+y);
+		if(x-((q+q)*y)<y)
 		{
-			return multiply(2,q);
+			if(nx = ny)
+			{
+				return q+q;
+			}
+			else
+			{
+				return -(q+q);
+			}
 		}
 		else
 		{
-			return multiply(2,q)+1;
+			if(nx = ny)
+			{
+				return (q+q)+1;
+			}
+			else
+			{
+				return -((q+q)+1);
+			}
 		}
 		
     }
 
     /** Returns the integer part of the square root of x. */
     function int sqrt(int x) {
-		var int y, j, yp2j;
+		var int y, j, yp2j, yp2j2;
 		let y = 0;
 		let j = 7;
 		while(j > -1)
 		{
-			let yp2j = multiply((y+toToThe[j]),(y+toToThe[j]));
-			if((yp2j < x) | (yp2j = x))
+			let yp2j = y+twoToThe[j];
+			let yp2j2 = yp2j*yp2j;
+			if(~(yp2j2>x) & (yp2j2>0)) // check for overflow
 			{
-				y = y + twoToThe[j];
+				let y = yp2j;
 			}
+			let j = j-1;
 		}
 		return y;
     }
@@ -112,7 +133,8 @@ class Math {
 		{
 			return a;
 		}
-		else {
+		else 
+		{
 			return b;
 		}
     }
