@@ -9,37 +9,56 @@
 class String {
 	field Array str;
 	field int strLength;
+	field int strMaxLength;
 	
     /** Constructs a new empty String with a maximum length of maxLength. */
     constructor String new(int maxLength) {
     	let str = Array.new(maxLength);
-    	let strLength = maxLength;
+    	let strMaxLength = maxLength;
+    	let strLength = 0;
+    	return this;
     }
 
     /** De-allocates the string and frees its space. */
     method void dispose() {
-    	
+    	str.dispose();
+    	return;
     }
 
     /** Returns the current length of this String. */
     method int length() {
+    	return strLength;
     }
 
     /** Returns the character at location j. */
     method char charAt(int j) {
+    	return str[j];
     }
 
     /** Sets the j'th character of this string to be c. */
     method void setCharAt(int j, char c) {
+    	let str[j] = c;
+    	return;
     }
 
     /** Appends the character c to the end of this String.
      *  Returns this string as the return value. */
     method String appendChar(char c) {
+    	if(strLength < strMaxLength)
+    	{
+	   	let str[strLength] = c;
+	   	let strLength = strLength + 1;
+	}
+    	return this;
     }
 
     /** Erases the last character from this String. */
     method void eraseLastChar() {
+    	if(strLength > 0)
+    	{
+    		let strLength = strLength - 1;
+    	}
+    	return;
     }
 
     /** Returns the integer value of this String until the first non
