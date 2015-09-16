@@ -7,7 +7,9 @@
  * Represents a String object. Implements the String type.
  */
 class String {
-
+	field Array str;
+	field int strLength;
+	
     /** Constructs a new empty String with a maximum length of maxLength. */
     constructor String new(int maxLength) {
     }

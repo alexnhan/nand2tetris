@@ -15,6 +15,7 @@ class Memory {
 		let freeList = 2048;
 		let freeList[0] = 16383 - 2048; // size of heap
 		let freeList[1] = null; // link to next available list
+		return;
     }
 
     /** Returns the value of the main memory at the given address. */
@@ -31,11 +32,13 @@ class Memory {
 
     /** finds and allocates from the heap a memory block of the 
      *  specified size and returns a reference to its base address. */
-    function int alloc(int size) {
-	// first-fit heuristics
+    function int alloc(int size) { // first-fit heuristics
+		var Array pointer;
+		var Array nextList;
+		var Array prevList;
+		var int listSize, next;
 		if(size < freeList[0])
 		{
-			var Array pointer;
 			let pointer = freeList+1;
 			let freeList = freeList + size + 1; // moving the free list to next available location
 			let freeList[0] = pointer[-1] - (size+1); // updating size
@@ -45,11 +48,8 @@ class Memory {
 		}
 		else // if the size does not fit, find the next list that will fit
 		{
-			var Array nextList;
-			var Array prevList;
-			var int listSize;
 			let nextList = freeList[1];
-			let prevList = null;
+			let prevList = freeList;
 			let listSize = nextList[0];
 			while(~(size < listSize) & ~(nextList = null))
 			{
@@ -59,15 +59,13 @@ class Memory {
 			}
 			if(size<listSize)
 			{
-				var Array pointer;
 				let pointer = nextList+1;
+				let next = nextList[1];
 				let nextList = nextList + size + 1; // moving the free list to next available location
 				let nextList[0] = pointer[-1] - (size+1); // updating size
+				let nextList[1] = next;
 				let pointer[-1] = size+1; // storing size of array
-				if(!(prevList = null))
-				{
-					prevList[1] = nextList; // have previous list now point to this updated next list
-				}
+				let prevList[1] = nextList; // have previous list now point to this updated next list
 				return pointer;
 			}
 			else
@@ -87,5 +85,6 @@ class Memory {
 		}
 		let list[1] = object - 1; // object - 1 holds the size
 		let object[0] = null; // point the list to null
+		return;
     }    
 }
