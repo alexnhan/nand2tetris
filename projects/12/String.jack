@@ -12,6 +12,7 @@ class String {
 	
     /** Constructs a new empty String with a maximum length of maxLength. */
     constructor String new(int maxLength) {
+    	let str = Array.new(maxLength);
     }
 
     /** De-allocates the string and frees its space. */
