@@ -13,10 +13,12 @@ class String {
     /** Constructs a new empty String with a maximum length of maxLength. */
     constructor String new(int maxLength) {
     	let str = Array.new(maxLength);
+    	let strLength = maxLength;
     }
 
     /** De-allocates the string and frees its space. */
     method void dispose() {
+    	
     }
 
     /** Returns the current length of this String. */
