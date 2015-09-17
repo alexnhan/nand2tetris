@@ -25,7 +25,6 @@ class Main {
 
         do Output.println();
         do Output.printString("Time is up. Make sure that 2 seconds had passed.");
-        
         return;
     }
 
