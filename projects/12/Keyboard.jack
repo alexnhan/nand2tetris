@@ -7,7 +7,7 @@
  * A library for handling user input from the keyboard.
  */
 class Keyboard {
-	static Array keyboard
+	static Array keyboard;
     /** Initializes the keyboard. */
     function void init() {
 		let keyboard = 24576;
